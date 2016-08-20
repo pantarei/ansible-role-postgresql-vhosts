@@ -5,8 +5,10 @@
   become: yes
   become_user: postgres
   postgresql_user:
-    name: "{{ postgresql_vhosts_user }}"
-    password: "{{ postgresql_vhosts_pass }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+  with_items:
+    - { name: "{{ postgresql_vhosts_user }}", password: "{{ postgresql_vhosts_pass }}" }
   when: postgresql_vhosts_pass is string
   tags: hswong3i.postgresql_vhosts
 
@@ -14,11 +16,13 @@
   become: yes
   become_user: postgres
   postgresql_db:
-    name: "{{ postgresql_vhosts_id }}"
-    encoding: "{{ postgresql_vhosts_encoding }}"
-    lc_collate: "{{ postgresql_vhosts_lc_collate }}"
-    lc_ctype: "{{ postgresql_vhosts_lc_ctype }}"
-    template: "{{ postgresql_vhosts_template }}"
+    name: "{{ item.name }}"
+    encoding: "{{ item.encoding }}"
+    lc_collate: "{{ item.lc_collate }}"
+    lc_ctype: "{{ item.lc_ctype }}"
+    template: "{{ item.template }}"
+  with_items:
+    - { name: "{{ postgresql_vhosts_id }}", encoding: "{{ postgresql_vhosts_encoding }}", lc_collate: "{{ postgresql_vhosts_lc_collate }}", lc_ctype: "{{ postgresql_vhosts_lc_ctype }}", template: "{{ postgresql_vhosts_template }}" }
   tags: hswong3i.postgresql_vhosts
 
 - name: append privs for postgresql user
